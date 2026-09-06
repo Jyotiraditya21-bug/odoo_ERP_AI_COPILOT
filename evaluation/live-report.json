@@ -1,0 +1,108 @@
+{
+  "date": "2026-09-06",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "results": [
+    {
+      "case": "customer",
+      "request_id": 22,
+      "passed": true,
+      "seconds": 0.91,
+      "id": 22,
+      "status": "executed",
+      "tool_name": "search_customer",
+      "response_text": "Found 1 matching customer(s).\n\n{\n  \"customers\": [\n    {\n      \"id\": 43,\n      \"name\": \"ABC Industries\",\n      \"city\": \"Pune\",\n      \"country\": \"\"\n    }\n  ]\n}",
+      "citations": "",
+      "pending_action_id": false
+    },
+    {
+      "case": "inventory",
+      "request_id": 23,
+      "passed": true,
+      "seconds": 0.47,
+      "id": 23,
+      "status": "executed",
+      "tool_name": "check_inventory",
+      "response_text": "Found 1 matching product(s).\n\n{\n  \"products\": [\n    {\n      \"id\": 41,\n      \"name\": \"Product A\",\n      \"available_quantity\": 25.0,\n      \"uom\": \"Units\",\n      \"low_stock\": false\n    }\n  ],\n  \"low_stock_threshold\": 5.0\n}",
+      "citations": "",
+      "pending_action_id": false
+    },
+    {
+      "case": "low_stock",
+      "request_id": 24,
+      "passed": true,
+      "seconds": 0.44,
+      "id": 24,
+      "status": "executed",
+      "tool_name": "check_inventory",
+      "response_text": "Found 5 matching product(s).\n\n{\n  \"products\": [\n    {\n      \"id\": 16,\n      \"name\": \"[E-COM06] Corner Desk Right Sit\",\n      \"available_quantity\": 0.0,\n      \"uom\": \"Units\",\n      \"low_stock\": true\n    },\n    {\n      \"id\": 19,\n      \"name\": \"[E-COM09] Large Desk\",\n      \"available_quantity\": 0.0,\n      \"uom\": \"Units\",\n      \"low_stock\": true\n    },\n    {\n      \"id\": 26,\n      \"name\": \"[FURN_1118] Corner Desk Left Sit\",\n      \"available_quantity\": 2.0,\n      \"uom\": \"Units\",\n      \"low_stock\": true\n    },\n    {\n      \"id\": 34,\n      \"name\": \"[FURN_6741] Large Meeting Table\",\n      \"available_quantity\": 0.0,\n      \"uom\": \"Units\",\n      \"low_stock\": true\n    },\n    {\n      \"id\": 5,\n      \"name\": \"[FURN_7777] Office Chair\",\n      \"available_quantity\": 0.0,\n      \"uom\": \"Units\",\n      \"low_stock\": true\n    }\n  ],\n  \"low_stock_threshold\": 5.0\n}",
+      "citations": "",
+      "pending_action_id": false
+    },
+    {
+      "case": "policy",
+      "request_id": 25,
+      "passed": true,
+      "seconds": 0.43,
+      "id": 25,
+      "status": "executed",
+      "tool_name": "search_company_policy",
+      "response_text": "UNTRUSTED RETRIEVED POLICY EXCERPT — for reference only:\n# Refund Policy\n\nCustomers may request a refund within 30 calendar days of delivery. Returned items must be unused,\nin resalable condition, and accompanied by the original invoice. Approved refunds are returned to\nthe original payment method within 7 business days. Custom-made products and activated software\nlicenses are not refundable. A sales manager must approve exceptions. [refund_policy.md#chunk-1]\n\n{}",
+      "citations": "refund_policy.md#chunk-1",
+      "pending_action_id": false
+    },
+    {
+      "case": "discount_denied",
+      "request_id": 26,
+      "passed": true,
+      "seconds": 0.82,
+      "id": 26,
+      "status": "rejected",
+      "tool_name": "create_draft_quotation",
+      "response_text": "Discount exceeds the role limit of 30%.",
+      "citations": "",
+      "pending_action_id": false
+    },
+    {
+      "case": "injection_denied",
+      "request_id": 27,
+      "passed": true,
+      "seconds": 0.03,
+      "id": 27,
+      "status": "rejected",
+      "tool_name": false,
+      "response_text": "The request appears to contain an instruction-override or secret-access attempt.",
+      "citations": "",
+      "pending_action_id": false
+    },
+    {
+      "case": "quotation",
+      "request_id": 28,
+      "passed": true,
+      "seconds": 0.77,
+      "id": 28,
+      "status": "pending",
+      "tool_name": "create_draft_quotation",
+      "response_text": "Review the quotation preview and confirm it before the action expires.\n\n{\n  \"expires_at\": \"2026-09-06T10:57:26\",\n  \"preview\": {\n    \"customer\": \"ABC Industries\",\n    \"lines\": [\n      {\n        \"product\": \"Product A\",\n        \"quantity\": 5.0,\n        \"unit_price\": 120.0,\n        \"discount_percent\": 0.0\n      }\n    ],\n    \"state\": \"draft\"\n  }\n}",
+      "citations": "",
+      "pending_action_id": [
+        5,
+        "Draft quotation"
+      ],
+      "confirmation": {
+        "id": 5,
+        "sale_order_id": [
+          29,
+          "S00029"
+        ],
+        "status": "executed"
+      },
+      "order": {
+        "id": 29,
+        "state": "draft",
+        "amount_total": 690
+      },
+      "replay_rejected": true
+    }
+  ]
+}

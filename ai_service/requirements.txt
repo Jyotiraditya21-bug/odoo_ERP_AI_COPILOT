@@ -1,0 +1,8 @@
+fastapi==0.115.9
+uvicorn[standard]==0.34.2
+pydantic==2.11.4
+pydantic-settings==2.9.1
+httpx==0.28.1
+chromadb==1.0.9
+structlog==25.3.0
+posthog<6

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_chat_own" model="ir.rule">
+        <field name="name">Copilot requests: own records</field>
+        <field name="model_id" ref="model_ai_copilot_chat_request"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_pending_own" model="ir.rule">
+        <field name="name">Pending actions: own records</field>
+        <field name="model_id" ref="model_ai_copilot_pending_action"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>
+

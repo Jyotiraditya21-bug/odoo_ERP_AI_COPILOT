@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_copilot_chat_list" model="ir.ui.view">
+        <field name="name">ai.copilot.chat.request.list</field>
+        <field name="model">ai.copilot.chat.request</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="status == 'pending'" decoration-success="status == 'executed'" decoration-danger="status in ('rejected', 'failed')">
+                <field name="create_date"/>
+                <field name="request_text"/>
+                <field name="tool_name"/>
+                <field name="status" widget="badge"/>
+                <field name="correlation_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ai_copilot_chat_form" model="ir.ui.view">
+        <field name="name">ai.copilot.chat.request.form</field>
+        <field name="model">ai.copilot.chat.request</field>
+        <field name="arch" type="xml">
+            <form string="Secure AI Copilot">
+                <header>
+                    <button name="action_submit" string="Ask Copilot" type="object" class="oe_highlight" invisible="status != 'pending' or response_text"/>
+                    <button name="action_confirm" string="Confirm action" type="object" class="oe_highlight" invisible="not pending_action_id or not action_token or status != 'pending'"/>
+                    <button name="action_cancel" string="Cancel action" type="object" invisible="not pending_action_id or status != 'pending'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,confirmed,executed,rejected,failed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="request_text" placeholder="Ask about a customer, inventory, policy, or draft quotation..." readonly="response_text"/>
+                    </group>
+                    <group string="Assistant" invisible="not response_text">
+                        <field name="response_text" nolabel="1"/>
+                        <field name="citations" invisible="not citations"/>
+                        <field name="tool_name"/>
+                        <field name="correlation_id"/>
+                    </group>
+                    <group string="Pending action preview" invisible="not pending_action_id">
+                        <field name="pending_action_id"/>
+                        <field name="action_token" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_copilot_pending_list" model="ir.ui.view">
+        <field name="name">ai.copilot.pending.action.list</field>
+        <field name="model">ai.copilot.pending.action</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="status == 'pending'" decoration-success="status == 'executed'" decoration-danger="status in ('rejected', 'failed')">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="expires_at"/>
+                <field name="status" widget="badge"/>
+                <field name="sale_order_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ai_copilot_pending_form" model="ir.ui.view">
+        <field name="name">ai.copilot.pending.action.form</field>
+        <field name="model">ai.copilot.pending.action</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header><field name="status" widget="statusbar"/></header>
+                <sheet><group><field name="user_id"/><field name="expires_at"/><field name="sale_order_id"/></group><group string="Preview"><field name="preview" nolabel="1"/></group><group><field name="correlation_id"/><field name="error_message"/></group></sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_copilot_audit_list" model="ir.ui.view">
+        <field name="name">ai.copilot.audit.log.list</field>
+        <field name="model">ai.copilot.audit.log</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0">
+                <field name="timestamp"/>
+                <field name="user_id"/>
+                <field name="selected_tool"/>
+                <field name="authorization_result"/>
+                <field name="confirmation_state"/>
+                <field name="error_category"/>
+                <field name="latency_ms"/>
+                <field name="correlation_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ai_copilot_audit_form" model="ir.ui.view">
+        <field name="name">ai.copilot.audit.log.form</field>
+        <field name="model">ai.copilot.audit.log</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0"><sheet><group><field name="timestamp"/><field name="user_id"/><field name="correlation_id"/><field name="model_provider"/><field name="latency_ms"/></group><group><field name="original_request"/><field name="selected_tool"/><field name="validated_arguments"/><field name="authorization_result"/><field name="confirmation_state"/><field name="execution_result"/><field name="error_category"/></group></sheet></form>
+        </field>
+    </record>
+
+    <record id="action_ai_copilot_chat" model="ir.actions.act_window"><field name="name">Copilot</field><field name="res_model">ai.copilot.chat.request</field><field name="view_mode">tree,form</field><field name="context">{'default_user_id': uid}</field></record>
+    <record id="action_ai_copilot_pending" model="ir.actions.act_window"><field name="name">Pending Actions</field><field name="res_model">ai.copilot.pending.action</field><field name="view_mode">tree,form</field></record>
+    <record id="action_ai_copilot_audit" model="ir.actions.act_window"><field name="name">Audit History</field><field name="res_model">ai.copilot.audit.log</field><field name="view_mode">tree,form</field></record>
+</odoo>
+

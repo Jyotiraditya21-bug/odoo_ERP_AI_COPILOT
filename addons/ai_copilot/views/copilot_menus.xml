@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ai_copilot_root" name="AI Copilot" sequence="70" groups="base.group_user"/>
+    <menuitem id="menu_ai_copilot_chat" name="Ask Copilot" parent="menu_ai_copilot_root" action="action_ai_copilot_chat" sequence="10"/>
+    <menuitem id="menu_ai_copilot_pending" name="Pending Actions" parent="menu_ai_copilot_root" action="action_ai_copilot_pending" sequence="20"/>
+    <menuitem id="menu_ai_copilot_audit" name="Audit History" parent="menu_ai_copilot_root" action="action_ai_copilot_audit" sequence="30" groups="sales_team.group_sale_manager"/>
+</odoo>
+

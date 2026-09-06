@@ -1,0 +1,81 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: ai_service/Dockerfile
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      ODOO_BASE_URL: http://odoo:8069
+      POLICY_DIR: /app/policies
+      CHROMA_PATH: /data/chroma
+    volumes:
+      - ./policies:/app/policies:ro
+      - ai-data:/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  odoo:
+    image: odoo:17.0
+    depends_on:
+      db:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
+    environment:
+      HOST: db
+      PORT: 5432
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+      AI_SERVICE_URL: ${AI_SERVICE_URL}
+      ODOO_SERVICE_KEY: ${ODOO_SERVICE_KEY}
+      AI_REQUEST_TIMEOUT_SECONDS: ${AI_REQUEST_TIMEOUT_SECONDS}
+      DEMO_SALESPERSON_PASSWORD: ${DEMO_SALESPERSON_PASSWORD}
+      DEMO_MANAGER_PASSWORD: ${DEMO_MANAGER_PASSWORD}
+      MAX_QUOTATION_QUANTITY: ${MAX_QUOTATION_QUANTITY}
+      MAX_SALESPERSON_DISCOUNT: ${MAX_SALESPERSON_DISCOUNT}
+      MAX_MANAGER_DISCOUNT: ${MAX_MANAGER_DISCOUNT}
+      PENDING_ACTION_TTL_SECONDS: ${PENDING_ACTION_TTL_SECONDS}
+      LOW_STOCK_THRESHOLD: ${LOW_STOCK_THRESHOLD}
+    command:
+      - odoo
+      - --database=${ODOO_DB}
+      - --db_host=db
+      - --db_port=5432
+      - --db_user=${POSTGRES_USER}
+      - --db_password=${POSTGRES_PASSWORD}
+      - --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+      - --init=ai_copilot
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ./addons:/mnt/extra-addons:ro
+    ports:
+      - "8069:8069"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8069/web/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  postgres-data:
+  odoo-data:
+  ai-data:

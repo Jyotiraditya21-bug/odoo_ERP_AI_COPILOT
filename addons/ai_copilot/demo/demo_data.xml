@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="partner_abc_industries" model="res.partner"><field name="name">ABC Industries</field><field name="customer_rank">1</field><field name="city">Pune</field></record>
+    <record id="partner_northstar_retail" model="res.partner"><field name="name">Northstar Retail</field><field name="customer_rank">1</field><field name="city">Bengaluru</field></record>
+
+    <record id="product_product_a" model="product.product"><field name="name">Product A</field><field name="type">product</field><field name="list_price">120.0</field></record>
+    <record id="product_product_b" model="product.product"><field name="name">Product B</field><field name="type">product</field><field name="list_price">75.0</field></record>
+    <record id="product_low_stock_widget" model="product.product"><field name="name">Low Stock Widget</field><field name="type">product</field><field name="list_price">45.0</field></record>
+
+    <record id="user_salesperson" model="res.users"><field name="name">Demo Salesperson</field><field name="login">sales.demo</field><field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman')), (4, ref('stock.group_stock_user'))]"/></record>
+    <record id="user_manager" model="res.users"><field name="name">Demo Sales Manager</field><field name="login">manager.demo</field><field name="groups_id" eval="[(4, ref('sales_team.group_sale_manager')), (4, ref('stock.group_stock_manager'))]"/></record>
+
+    <record id="quant_product_a" model="stock.quant">
+        <field name="product_id" ref="product_product_a"/>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="quantity">25</field>
+    </record>
+    <record id="quant_product_b" model="stock.quant">
+        <field name="product_id" ref="product_product_b"/>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="quantity">12</field>
+    </record>
+    <record id="quant_low_stock_widget" model="stock.quant">
+        <field name="product_id" ref="product_low_stock_widget"/>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="quantity">2</field>
+    </record>
+
+    <record id="example_quotation" model="sale.order"><field name="partner_id" ref="partner_abc_industries"/><field name="user_id" ref="user_salesperson"/></record>
+    <record id="example_quotation_line" model="sale.order.line"><field name="order_id" ref="example_quotation"/><field name="product_id" ref="product_product_a"/><field name="product_uom_qty">2</field></record>
+</odoo>
