@@ -10,6 +10,8 @@ A portfolio-grade **Odoo 17 ERP AI Copilot** designed to allow employees to quer
 
 Natural-language interpretation remains *probabilistic*, but identity, authorization, validation, confirmation, replay protection, and execution remain strictly *deterministic*.
 
+For a beginner-friendly deep dive into the architecture, technical terms, request lifecycles, and complete file guide, see [EXPLANATION.md](EXPLANATION.md).
+
 ---
 
 ## Architecture & Security Model
